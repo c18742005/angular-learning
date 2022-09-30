@@ -5,4 +5,10 @@ import { Component } from '@angular/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {}
+export class AppComponent {
+  public linkLoaded: string = 'recipe';
+
+  public changeLink(link: string): void {
+    this.linkLoaded = link;
+  }
+}
