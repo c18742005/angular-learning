@@ -1,10 +1,13 @@
-import { EventEmitter, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
+import { Subject } from "rxjs";
 import { Ingredient } from "src/app/shared/ingredient.model";
 import { ShoppingListService } from "../shopping-list/shopping-list.service";
 import { Recipe } from "./recipe.model";
 
 @Injectable() 
 export class RecipeService {
+  public recipesChanged: Subject<Recipe[]> = new Subject<Recipe[]>();
+
   private recipes: Recipe[] = [new Recipe(
     'Spaghetti Bolognese', 
     'An Italian classic dish', 
@@ -17,8 +20,6 @@ export class RecipeService {
     'https://www.mygorgeousrecipes.com/wp-content/uploads/2019/01/Healthy-Chicken-Fajitas-4.jpg',
     [new Ingredient('Chicken', 1), new Ingredient('Wraps', 4), new Ingredient('Bell Pepper', 1), new Ingredient('Onion', 1) ]
   )];
-
-  public recipeSelected = new EventEmitter<Recipe>();
   
   constructor(private shoppingListService: ShoppingListService) {}
 
@@ -32,5 +33,20 @@ export class RecipeService {
 
   addIngredientsToShoppingList(ingredients: Ingredient[]): void {
     this.shoppingListService.addIngredients(ingredients);
+  }
+
+  updateRecipe(index: number, newRecipe: Recipe): void {
+    this.recipes[index] = newRecipe;
+    this.recipesChanged.next(this.recipes.slice());
+  }
+
+  addRecipe(recipe: Recipe): void {
+    this.recipes.push(recipe);
+    this.recipesChanged.next(this.recipes.slice());
+  }
+
+  deleteRecipe(index: number): void {
+    this.recipes.splice(index, 1);
+    this.recipesChanged.next(this.recipes.slice());
   }
 }
