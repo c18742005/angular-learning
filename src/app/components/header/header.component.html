@@ -29,8 +29,10 @@
             Manage <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
-            <li><a style="cursor: pointer">Save</a></li>
-            <li><a style="cursor: pointer">Fetch</a></li>
+            <li><a style="cursor: pointer" (click)="onSaveData()">Save</a></li>
+            <li>
+              <a style="cursor: pointer" (click)="onFetchData()">Fetch</a>
+            </li>
           </ul>
         </li>
       </ul>
