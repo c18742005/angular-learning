@@ -55,6 +55,10 @@ export class AuthComponent implements OnInit {
     this.myForm.reset();
   }
 
+  onHandleError() {
+    this.error = null;
+  }
+
   ngOnInit(): void {
     this.myForm = new FormGroup({
       email: new FormControl(null, [Validators.required, Validators.email]),
