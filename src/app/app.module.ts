@@ -3,9 +3,9 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './components/header/header.component';
 import { CoreModule } from './core.module';
-import { SharedModule } from './shared/shared.module';
+import { HeaderComponent } from './libs/header/header.component';
+import { SharedModule } from './libs/shared/shared.module';
 
 @NgModule({
   declarations: [

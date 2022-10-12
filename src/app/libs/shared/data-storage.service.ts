@@ -1,8 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, tap } from 'rxjs/operators';
-import { Recipe } from '../components/recipes/recipe.model';
-import { RecipeService } from '../components/recipes/recipe.service';
+import { Recipe } from '../recipes/recipe.model';
+import { RecipeService } from '../recipes/recipe.service';
 
 
 @Injectable({ providedIn: 'root' })
