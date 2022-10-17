@@ -1,8 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { map, Subscription } from 'rxjs';
+import * as fromApp from '../../../store/app.reducer';
+import * as ShoppingListActions from '../../shopping-list/store/shopping-list.actions';
 import { Recipe } from '../recipe.model';
-import { RecipeService } from '../recipe.service';
+import * as RecipeActions from '../store/recipe.actions';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -14,12 +17,23 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   public id: number
   public subscription: Subscription;
   
-  constructor(private recipeService: RecipeService, private route: ActivatedRoute, private router: Router) { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private store: Store<fromApp.AppState>) { }
 
   ngOnInit(): void {
     this.subscription = this.route.params.subscribe(params => {
       this.id = +params['id'];
-      this.recipe = this.recipeService.getRecipe(this.id);
+      this.store.select('recipes')
+        .pipe(map(recipeState => {
+          return recipeState.recipes.find((recipe, index) => {
+            return index === this.id;
+          });
+        })).subscribe(recipe => {
+          this.recipe = recipe;
+        }
+      );
     });
   }
 
@@ -28,7 +42,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   }
 
   onAddToShoppingList(): void {
-    this.recipeService.addIngredientsToShoppingList(this.recipe.ingredients);
+    this.store.dispatch(new ShoppingListActions.AddIngredients(this.recipe.ingredients));
   }
 
   onEditRecipe(): void {
@@ -36,7 +50,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   }
 
   onDeleteRecipe(): void {
-    this.recipeService.deleteRecipe(this.id);
+    this.store.dispatch(new RecipeActions.DeleteRecipe(this.id));
     this.router.navigate(['/recipes']);
   }
 }
